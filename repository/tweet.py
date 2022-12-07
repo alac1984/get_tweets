@@ -12,23 +12,19 @@ from .models.tweet import tb_tweet_entity
 
 
 def insert_domain(domain: EntityDomain, session: Session):
-    has_domain = session.query(Domain).filter(Domain.id == domain.id).first()
-    if not has_domain:
-        model_domain = Domain(
-            id=domain.id, name=domain.name, description=domain.description
-        )
-        session.add(model_domain)
-        session.commit()
+    model_domain = Domain(
+        id=domain.id, name=domain.name, description=domain.description
+    )
+    session.add(model_domain)
+    session.commit()
 
 
 def insert_entity(entity: EntityEntity, session: Session):
-    has_entity = session.query(Entity).filter(Entity.id == entity.id).first()
-    if not has_entity:
-        model_entity = Entity(
-            id=entity.id, name=entity.name, description=entity.description
-        )
-        session.add(model_entity)
-        session.commit()
+    model_entity = Entity(
+        id=entity.id, name=entity.name, description=entity.description
+    )
+    session.add(model_entity)
+    session.commit()
 
 
 def insert_domain_tweet_relation(domain_id: int, tweet_id: int, session: Session):

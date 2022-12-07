@@ -1,6 +1,6 @@
 import pytest
 from datetime import datetime
-from sqlalchemy.sql import text
+from sqlalchemy.exc import IntegrityError
 
 from repository.models.tweet import Tweet
 from repository.models.tweet import Domain
@@ -13,39 +13,6 @@ from repository.tweet import insert_domain
 from repository.tweet import insert_entity
 from repository.tweet import insert_domain_tweet_relation
 from repository.tweet import insert_entity_tweet_relation
-
-
-@pytest.fixture
-def init_db(engine):
-    tweet = {
-        "id": 1,
-        "user_id": 1,
-        "text": "This is a tweet",
-        "lang": "pt-br",
-        "created_at": datetime(2022, 1, 1, 1, 1, 1, 1),
-    }
-    user = {
-        "id": 1,
-        "username": "pythonjazz",
-        "created_at": datetime(2022, 1, 1, 1, 1, 1, 1),
-        "description": "The best",
-        "location": "Fortaleza",
-    }
-    with engine.connect() as conn:
-        ins_user_stmt = text(
-            """
-            insert into tb_user(id, username, created_at, description, location)
-            values(:id, :username, :created_at, :description, :location);
-            """
-        )
-        ins_tweet_stmt = text(
-            """
-            insert into tb_tweet(id, user_id, text, lang, created_at)
-            values(:id, :user_id, :text, :lang, :created_at);
-            """
-        )
-        conn.execute(ins_user_stmt, **user)
-        conn.execute(ins_tweet_stmt, **tweet)
 
 
 def test_insert_domain(session):
@@ -62,11 +29,23 @@ def test_insert_domain(session):
 
 
 def test_insert_domain_already_exist(session, init_db):
-    ...
+    with pytest.raises(IntegrityError):
+        entity_domain = EntityDomain(
+            id=1,
+            name="first_domain",
+            description="description",
+        )
+        insert_domain(entity_domain, session)
 
 
 def test_insert_entity_already_exist(session, init_db):
-    ...
+    with pytest.raises(IntegrityError):
+        entity_entity = EntityEntity(
+            id=1,
+            name="first_entity",
+            description="description",
+        )
+        insert_entity(entity_entity, session)
 
 
 def test_insert_entity(session):
@@ -98,4 +77,8 @@ def test_insert_tweet_no_domain_no_entity(session, init_db):
 
 
 def test_insert_domain_tweet_relation(session):
+    ...
+
+
+def test_insert_entity_tweet_relation(session):
     ...
