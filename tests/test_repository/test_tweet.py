@@ -62,9 +62,9 @@ def test_insert_entity(session):
     assert query_entity.id == 1
 
 
-def test_insert_tweet_no_domain_no_entity(session, init_db):
+def test_insert_tweet_no_domain_no_entity(session):
     entity_tweet = EntityTweet(
-        id=2,
+        id=1,
         text="This is a tweet",
         created_at=datetime(2022, 1, 1, 1, 1, 1, 1),
         user_id=1,
@@ -72,9 +72,36 @@ def test_insert_tweet_no_domain_no_entity(session, init_db):
     )
     insert_tweet(entity_tweet, session)
 
-    query_tweet = session.query(Tweet).filter(Tweet.id == 2).first()
+    query_tweet = session.query(Tweet).filter(Tweet.id == 1).first()
 
-    assert query_tweet.id == 2
+    assert query_tweet.id == 1
+
+
+def test_insert_tweet_with_domain_and_entity(full_tweet, session):
+    entity_domain = EntityDomain(
+        id=1,
+        name="first_domain",
+        description="description",
+    )
+    entity_entity = EntityEntity(
+        id=1,
+        name="first_entity",
+        description="description",
+    )
+    entity_tweet = EntityTweet(
+        id=1,
+        text="This is a tweet",
+        created_at=datetime(2022, 1, 1, 1, 1, 1, 1),
+        user_id=1,
+        lang="en",
+        domains=[entity_domain],
+        entities=[entity_entity],
+    )
+    insert_tweet(entity_tweet, session)
+
+    query_tweet = session.query(Tweet).filter(Tweet.id == 1).first()
+
+    assert query_tweet.id == 1
 
 
 def test_insert_domain_tweet_relation(session, engine, init_db):
@@ -87,5 +114,11 @@ def test_insert_domain_tweet_relation(session, engine, init_db):
     assert result == (2, 1)
 
 
-def test_insert_entity_tweet_relation(session):
-    ...
+def test_insert_entity_tweet_relation(session, engine, init_db):
+    insert_entity_tweet_relation(1, 2, session)
+
+    with engine.connect() as conn:
+        sel_stmt = text("select * from tb_tweet_entity where tweet_id = :tweet_id")
+        result = conn.execute(sel_stmt, {"tweet_id": 2}).fetchone()
+
+    assert result == (2, 1)
