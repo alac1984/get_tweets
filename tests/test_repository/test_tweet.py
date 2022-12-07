@@ -1,6 +1,7 @@
 import pytest
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.sql import text
 
 from repository.models.tweet import Tweet
 from repository.models.tweet import Domain
@@ -76,8 +77,14 @@ def test_insert_tweet_no_domain_no_entity(session, init_db):
     assert query_tweet.id == 2
 
 
-def test_insert_domain_tweet_relation(session):
-    ...
+def test_insert_domain_tweet_relation(session, engine, init_db):
+    insert_domain_tweet_relation(1, 2, session)
+
+    with engine.connect() as conn:
+        sel_stmt = text("select * from tb_tweet_domain where tweet_id = :tweet_id")
+        result = conn.execute(sel_stmt, {"tweet_id": 2}).fetchone()
+
+    assert result == (2, 1)
 
 
 def test_insert_entity_tweet_relation(session):

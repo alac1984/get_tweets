@@ -29,11 +29,18 @@ def session(engine):
 
 @pytest.fixture
 def init_db(engine):
-    tweet = {
+    tweet1 = {
         "id": 1,
         "user_id": 1,
         "text": "This is a tweet",
         "lang": "pt-br",
+        "created_at": datetime(2022, 1, 1, 1, 1, 1, 1),
+    }
+    tweet2 = {
+        "id": 2,
+        "user_id": 1,
+        "text": "This is a new tweet",
+        "lang": "en",
         "created_at": datetime(2022, 1, 1, 1, 1, 1, 1),
     }
     user = {
@@ -78,7 +85,34 @@ def init_db(engine):
             values(:id, :name, :description);
             """
         )
+        ins_domain_tweet_stmt = text(
+            """
+            insert into tb_tweet_domain(tweet_id, domain_id)
+            values(:tweet_id, :domain_id);
+            """
+        )
+        ins_entity_tweet_stmt = text(
+            """
+            insert into tb_tweet_entity(tweet_id, entity_id)
+            values(:tweet_id, :entity_id);
+            """
+        )
         conn.execute(ins_user_stmt, **user)
-        conn.execute(ins_tweet_stmt, **tweet)
+        conn.execute(ins_tweet_stmt, **tweet1)
+        conn.execute(ins_tweet_stmt, **tweet2)
         conn.execute(ins_domain_stmt, **domain)
         conn.execute(ins_entity_stmt, **entity)
+        conn.execute(
+            ins_domain_tweet_stmt,
+            **{
+                "tweet_id": 1,
+                "domain_id": 1,
+            },
+        )
+        conn.execute(
+            ins_entity_tweet_stmt,
+            **{
+                "tweet_id": 1,
+                "entity_id": 1,
+            },
+        )
