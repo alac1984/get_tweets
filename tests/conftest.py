@@ -50,6 +50,11 @@ def init_db(engine):
         "description": "The best",
         "location": "Fortaleza",
     }
+    scraped_user = {
+        "id": 1,
+        "user_id": 1,
+        "scraped_on": datetime(2022, 1, 1, 1, 1, 1, 1),
+    }
     domain = {
         "id": 1,
         "name": "Domain 1",
@@ -71,6 +76,12 @@ def init_db(engine):
             """
             insert into tb_tweet(id, user_id, text, lang, created_at)
             values(:id, :user_id, :text, :lang, :created_at);
+            """
+        )
+        ins_scraped_user_stmt = text(
+            """
+            insert into tb_scraped_user(id, user_id, scraped_on)
+            values(:id, :user_id, :scraped_on);
             """
         )
         ins_domain_stmt = text(
@@ -98,6 +109,7 @@ def init_db(engine):
             """
         )
         conn.execute(ins_user_stmt, **user)
+        conn.execute(ins_scraped_user_stmt, **scraped_user)
         conn.execute(ins_tweet_stmt, **tweet1)
         conn.execute(ins_tweet_stmt, **tweet2)
         conn.execute(ins_domain_stmt, **domain)

@@ -1,6 +1,6 @@
 class Request:
-    def __init__(self, filters: dict = dict(), errors: list = list()) -> None:
-        self.filters = filters
+    def __init__(self, payload: dict = dict(), errors: list = list()) -> None:
+        self.payload = payload
         self.errors = errors
 
     def add_error(self, parameter: str, message: str) -> None:

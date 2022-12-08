@@ -1,10 +1,10 @@
 class Response:
-    def __init__(self, errors: list = list(), payload: dict = dict()) -> None:
+    def __init__(self, errors: list = list(), content: dict = dict()) -> None:
         self.errors = errors
-        self.payload = payload
+        self.content = content
 
-    def add_error(self, parameter: str, message: str) -> None:
-        self.errors.append({"parameter": parameter, "message": message})
+    def add_error(self, name: str, message: str) -> None:
+        self.errors.append({"name": name, "message": message})
 
     def has_error(self) -> bool:
         return len(self.errors) > 0
