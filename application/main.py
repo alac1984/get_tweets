@@ -1,13 +1,13 @@
 import logging
 
-# from twitter import get_tweets_from_user
-# from twitter import save_tweet_on_database
-# from twitter import tweet_was_saved_before
-# from users import get_next_user
-# from users import get_last_user
-
-from repository.models.tweet import Domain
 from repository.session import session
+from requests.user import UserRequest
+from use_cases.user import get_last_user_scraped
+from use_cases.user import get_next_user
+from use_cases.user import update_last_user
+from use_cases.tweet import get_tweets_from_user
+from use_cases.tweet import save_tweets_on_database
+
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -15,37 +15,21 @@ logging.basicConfig(
 
 
 def run() -> None:
-    domain = Domain(id=123, name="test_domain", description="description test")
-    session.add(domain)
-    session.commit()
+    while True:
+        # Get last user scraped, should return username
+        last_user = get_last_user_scraped(session)
+        # Get next user to be scrapped, should return username
+        next_user = get_next_user(last_user, session)
+        # Get user's tweets. Should return tweets or None
+        tweets = get_tweets_from_user(next_user, session)
 
+        if tweets:
+            save_tweets_on_database(session)
+            update_last_user(next_user, session)
+            break
 
-# def run() -> None:
-#     last_user = get_last_user()
-#     user = get_next_user(last_user)
-#     logging.debug(f"user selected is {user}")
-#     tweets = get_tweets_from_user(user)
+        update_last_user(next_user, session)
 
-#     if tweets.get('title', None) == "Too Many Requests":
-#         logging.debug("too many requests for Twitter API")
-#         return
-
-#     if tweets.get('meta', None):
-#         while tweets['meta']['result_count'] == 0:
-#             logging.debug(f"user {user} has no recent tweets")
-#             user = get_next_user(user)
-#             logging.debug(f"new user is {user}")
-#             tweets = get_tweets_from_user(user)
-
-#     count = 0
-#     for tweet in tweets["data"]:
-#         if tweet_was_saved_before(tweet['id']):
-#             continue
-
-#         save_tweet_on_database(user, tweet)
-#         count += 1
-
-#     logging.debug(f"{count} tweets from user {user} saved in database")
 
 if __name__ == "__main__":
     run()

@@ -1,4 +1,4 @@
-class BaseRequest:
+class Request:
     def __init__(self, filters: dict = dict(), errors: list = list()) -> None:
         self.filters = filters
         self.errors = errors
@@ -10,4 +10,4 @@ class BaseRequest:
         return len(self.errors) > 0
 
     def __bool__(self):
-        return True
+        return True if not self.has_error else False
