@@ -43,17 +43,26 @@ def init_db(engine):
         "lang": "en",
         "created_at": datetime(2022, 1, 1, 1, 1, 1, 1),
     }
-    user = {
-        "id": 1,
+    user1 = {
         "username": "pythonjazz",
         "created_at": datetime(2022, 1, 1, 1, 1, 1, 1),
         "description": "The best",
         "location": "Fortaleza",
+        "last_scraped": True,
     }
-    scraped_user = {
-        "id": 1,
-        "user_id": 1,
-        "scraped_on": datetime(2022, 1, 1, 1, 1, 1, 1),
+    user2 = {
+        "username": "freeforall",
+        "created_at": datetime(2022, 1, 1, 1, 1, 1, 1),
+        "description": "Awesome user",
+        "location": "Tortuga",
+        "last_scraped": False,
+    }
+    user3 = {
+        "username": "kallen",
+        "created_at": datetime(2022, 1, 1, 1, 1, 1, 1),
+        "description": "The worst",
+        "location": "Tijuana",
+        "last_scraped": False,
     }
     domain = {
         "id": 1,
@@ -68,20 +77,14 @@ def init_db(engine):
     with engine.connect() as conn:
         ins_user_stmt = text(
             """
-            insert into tb_user(id, username, created_at, description, location)
-            values(:id, :username, :created_at, :description, :location);
+            insert into tb_user(username, created_at, description, location, last_scraped)
+            values(:username, :created_at, :description, :location, :last_scraped);
             """
         )
         ins_tweet_stmt = text(
             """
             insert into tb_tweet(id, user_id, text, lang, created_at)
             values(:id, :user_id, :text, :lang, :created_at);
-            """
-        )
-        ins_scraped_user_stmt = text(
-            """
-            insert into tb_scraped_user(id, user_id, scraped_on)
-            values(:id, :user_id, :scraped_on);
             """
         )
         ins_domain_stmt = text(
@@ -108,8 +111,9 @@ def init_db(engine):
             values(:tweet_id, :entity_id);
             """
         )
-        conn.execute(ins_user_stmt, **user)
-        conn.execute(ins_scraped_user_stmt, **scraped_user)
+        conn.execute(ins_user_stmt, **user1)
+        conn.execute(ins_user_stmt, **user2)
+        conn.execute(ins_user_stmt, **user3)
         conn.execute(ins_tweet_stmt, **tweet1)
         conn.execute(ins_tweet_stmt, **tweet2)
         conn.execute(ins_domain_stmt, **domain)

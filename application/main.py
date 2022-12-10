@@ -1,7 +1,7 @@
 import logging
 
 from repository.session import session
-from requests.user import UserRequest
+from requests import Request
 from use_cases.user import get_last_user_scraped
 from use_cases.user import get_next_user
 from use_cases.user import update_last_user
@@ -16,12 +16,13 @@ logging.basicConfig(
 
 def run() -> None:
     while True:
+        request = Request()
         # Get last user scraped, should return username
-        last_user = get_last_user_scraped(session)
+        last_user = get_last_user_scraped(request, session)
         # Get next user to be scrapped, should return username
-        next_user = get_next_user(last_user, session)
+        next_user = get_next_user(request, last_user, session)
         # Get user's tweets. Should return tweets or None
-        tweets = get_tweets_from_user(next_user, session)
+        tweets = get_tweets_from_user(request, next_user, session)
 
         if tweets:
             save_tweets_on_database(session)

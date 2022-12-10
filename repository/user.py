@@ -1,14 +1,12 @@
-from sqlalchemy import desc
+"""repository/user.py"""
 from sqlalchemy.orm import Session
 
 from entities.user import EntityUser
 from .models.user import User
-from .models.user import ScrapedUser
 
 
 def insert_user(user: EntityUser, session: Session):
     model_user = User(
-        id=user.id,
         username=user.username,
         created_at=user.created_at,
         description=user.description,
@@ -19,13 +17,14 @@ def insert_user(user: EntityUser, session: Session):
 
 
 def retrieve_last_scraped_user(session: Session):
-    scraped_user = (
-        session.query(ScrapedUser)
-        .order_by(desc(ScrapedUser.scraped_on))
-        .limit(1)
-        .one()
-    )
+    last_scraped_user = session.query(User).filter(User.last_scraped == True).first()
 
-    model_user = session.query(User).filter(User.id == scraped_user.user_id).first()
+    return last_scraped_user
 
-    return model_user
+
+def retrieve_next_user(last_user_id: int, session: Session):
+    next_user = session.query(User).filter(User.id == last_user_id + 1).first()
+    if not next_user:
+        next_user = session.query(User).filter(User.id == 1).first()
+
+    return next_user
