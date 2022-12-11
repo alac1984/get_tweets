@@ -6,7 +6,7 @@ from repository.models.user import User
 from entities.user import EntityUser
 from repository.user import insert_user
 from repository.user import retrieve_last_scraped_user
-from repository.user import retrieve_next_user
+from repository.user import retrieve_next_user_to_be_scraped
 
 
 def test_insert_user(session):
@@ -32,7 +32,7 @@ def test_retrieve_last_scraped_user(init_db, session):
 
 
 def test_retrieve_next_user(init_db, session):
-    next_user = retrieve_next_user(1, session)
+    next_user = retrieve_next_user_to_be_scraped(1, session)
 
     assert next_user is not None
     assert isinstance(next_user, User)
@@ -40,7 +40,7 @@ def test_retrieve_next_user(init_db, session):
 
 
 def test_retrieve_next_user_error(init_db, session):
-    next_user = retrieve_next_user(999999, session)
+    next_user = retrieve_next_user_to_be_scraped(999999, session)
 
     assert next_user is not None
     assert isinstance(next_user, User)

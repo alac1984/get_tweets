@@ -1,6 +1,8 @@
+import json
 import pytest
 from datetime import datetime
 from sqlalchemy.sql import text
+from requests.models import Response
 
 from repository import Base
 from sqlalchemy import create_engine
@@ -27,7 +29,7 @@ def session(engine):
     connection.close()
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def init_db(engine):
     tweet1 = {
         "id": 1,
@@ -132,3 +134,34 @@ def init_db(engine):
                 "entity_id": 1,
             },
         )
+
+
+@pytest.fixture(scope="function")
+def mock_tweets():
+    tweets_dict = [
+        {
+            "id": 10293,
+            "user_id": 1,
+            "created_at": "2022-1-1 01:01:01:01",
+            "text": "É tóis",
+            "lang": "pt",
+            "context_annotations": [
+                {"domain": {"id": 1, "name": "This", "description": "hell yeah"}}
+            ],
+        },
+        {
+            "id": 10294,
+            "user_id": 2,
+            "created_at": "2022-1-1 01:01:01:01",
+            "text": "É vóis",
+            "lang": "en",
+            "context_annotations": [
+                {"domain": {"id": 2, "name": "That", "description": "hell no"}}
+            ],
+        },
+    ]
+    tweets_json = json.dumps(tweets_dict).encode("utf-8")
+    response = Response()
+    response._content = tweets_json
+
+    return response

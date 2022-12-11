@@ -1,10 +1,10 @@
 import logging
 
 from repository.session import session
-from requests import Request
-from use_cases.user import get_last_user_scraped
-from use_cases.user import get_next_user
-from use_cases.user import update_last_user
+from requisitions import Requisition
+from use_cases.user import get_id_last_user_scraped
+from use_cases.user import get_next_user_to_be_scraped
+from use_cases.user import update_last_user_scraped
 from use_cases.tweet import get_tweets_from_user
 from use_cases.tweet import save_tweets_on_database
 
@@ -16,20 +16,24 @@ logging.basicConfig(
 
 def run() -> None:
     while True:
-        request = Request()
-        # Get last user scraped, should return username
-        last_user = get_last_user_scraped(request, session)
-        # Get next user to be scrapped, should return username
-        next_user = get_next_user(request, last_user, session)
-        # Get user's tweets. Should return tweets or None
-        tweets = get_tweets_from_user(request, next_user, session)
+        req = Requisition()
+        # Get id of last user scraped
+        last_user_id = get_id_last_user_scraped(req, session).content["last_user_id"]
 
-        if tweets:
-            save_tweets_on_database(session)
-            update_last_user(next_user, session)
+        # Get id of next user to be scrapped
+        req = Requisition(payload={"last_user_id": last_user_id})
+        next_user = get_next_user_to_be_scraped(req, session).content
+
+        # Get user's tweets
+        req = Requisition(payload={"next_user_username": next_user["username"]})
+        tweets = get_tweets_from_user(req).content
+
+        if "tweets" in tweets:
+            save_tweets_on_database(req, session)
+            update_last_user_scraped(req, session)
             break
 
-        update_last_user(next_user, session)
+        update_last_user_scraped(req, session)
 
 
 if __name__ == "__main__":

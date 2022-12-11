@@ -22,7 +22,7 @@ def retrieve_last_scraped_user(session: Session):
     return last_scraped_user
 
 
-def retrieve_next_user(last_user_id: int, session: Session):
+def retrieve_next_user_to_be_scraped(last_user_id: int, session: Session):
     next_user = session.query(User).filter(User.id == last_user_id + 1).first()
     if not next_user:
         next_user = session.query(User).filter(User.id == 1).first()
