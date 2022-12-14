@@ -5,13 +5,13 @@ from use_cases.user import get_id_last_user_scraped
 from use_cases.user import get_next_user_to_be_scraped
 
 
-def test_get_id_last_user_scraped(init_db, session):
+def test_get_id_last_user_scraped_success(init_db, session):
     req = Requisition()
     response = get_id_last_user_scraped(req, session)
 
     assert response.content is not None
     assert isinstance(response, Response)
-    assert response.content["last_user_id"] == 1
+    assert response.content[0]["last_user_id"] == 1
 
 
 def test_get_id_last_user_scraped_without_data(session):
@@ -32,4 +32,4 @@ def test_get_next_user_to_be_scraped(init_db, session):
     assert bool(response) is True
     assert response.has_error() is False
     assert isinstance(response, Response)
-    assert response.content["id"] == 2
+    assert response.content[0]["id"] == 2

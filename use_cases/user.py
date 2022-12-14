@@ -11,7 +11,7 @@ def get_id_last_user_scraped(req: Requisition, session: Session) -> Response:
 
     try:
         last_user = retrieve_last_scraped_user(session)
-        response.content["last_user_id"] = last_user.id
+        response.content.append({"last_user_id": last_user.id})
     except Exception as e:
         response.add_error(str(e.__class__), e.__str__())
 
@@ -24,8 +24,7 @@ def get_next_user_to_be_scraped(req: Requisition, session: Session) -> Response:
     try:
         last_user_id = req.payload["last_user_id"]
         next_user = retrieve_next_user_to_be_scraped(last_user_id, session)
-        response.content["id"] = next_user.id
-        response.content["username"] = next_user.username
+        response.content.append({"id": next_user.id, "username": next_user.username})
     except Exception as e:
         response.add_error(str(e.__class__), e.__str__())
 

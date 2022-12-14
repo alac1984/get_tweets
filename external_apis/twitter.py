@@ -17,23 +17,6 @@ def retrieve_tweets_from_user(user: str):
     return response.json() if response.content is not None else []
 
 
-def save_tweet_on_database(user: str, tweet: dict) -> None:
-    """
-    Return False if tweet was not saved (was saved before)
-    Return True otherwise
-    """
-    with psycopg2.connect(config.conn_str) as conn:
-        cur = conn.cursor()
-        cur.execute(
-            """
-             insert into tweets (id, username, text, detected) values
-             (%s, %s, %s, %s)
-        """,
-            (tweet["id"], user, tweet["text"], datetime.now()),
-        )
-        conn.commit()
-
-
 def tweet_was_saved_before(tweet_id: int) -> bool:
     """
     Return True if tweet was saved before

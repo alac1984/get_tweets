@@ -1,7 +1,7 @@
 class Response:
     def __init__(self, **kwargs) -> None:
         self.errors = kwargs.get("errors", [])
-        self.content = kwargs.get("content", {})
+        self.content = kwargs.get("content", [])
 
     def add_error(self, name: str, message: str) -> None:
         self.errors.append({"name": name, "message": message})

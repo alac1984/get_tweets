@@ -1,6 +1,8 @@
 from unittest import mock
 
 from use_cases.tweet import get_tweets_from_user
+from use_cases.tweet import save_tweets_on_database
+from repository.models.tweet import Tweet
 from responses import Response
 from requisitions import Requisition
 
@@ -15,8 +17,8 @@ def test_get_tweets_from_user_success(mock_tweets):
 
     assert response is not None
     assert isinstance(response, Response)
-    assert "tweets" in response.content
-    assert isinstance(response.content["tweets"], list)
+    assert isinstance(response.content, list)
+    assert len(response.content) == 2
 
 
 def test_get_tweets_from_user_no_tweets(mock_tweets):
@@ -32,3 +34,17 @@ def test_get_tweets_from_user_no_tweets(mock_tweets):
     assert isinstance(response, Response)
     assert response.has_error()
     assert "JSONDecodeError" in response.errors[0]["name"]
+
+
+def test_save_tweets_on_database(mock_tweets, session):
+    req = Requisition(payload=mock_tweets.json())
+
+    response = save_tweets_on_database(req, session)
+
+    tweets = session.query(Tweet).all()
+
+    assert response is not None
+    assert isinstance(response, Response)
+    assert len(response.content) == 2
+    assert tweets[0].id == 10293
+    assert len(tweets) == 2

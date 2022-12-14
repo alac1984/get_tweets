@@ -142,7 +142,7 @@ def mock_tweets():
         {
             "id": 10293,
             "user_id": 1,
-            "created_at": "2022-1-1 01:01:01:01",
+            "created_at": "2022-12-14T02:51:10.000Z",
             "text": "É tóis",
             "lang": "pt",
             "context_annotations": [
@@ -152,7 +152,7 @@ def mock_tweets():
         {
             "id": 10294,
             "user_id": 2,
-            "created_at": "2022-1-1 01:01:01:01",
+            "created_at": "2022-12-14T02:51:10.000Z",
             "text": "É vóis",
             "lang": "en",
             "context_annotations": [

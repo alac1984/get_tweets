@@ -14,6 +14,10 @@ logging.basicConfig(
 )
 
 
+def flush_users() -> None:
+    ...
+
+
 def run() -> None:
     while True:
         req = Requisition()
@@ -29,7 +33,7 @@ def run() -> None:
         tweets = get_tweets_from_user(req).content
 
         if "tweets" in tweets:
-            save_tweets_on_database(req, session)
+            save_tweets_on_database(req)
             update_last_user_scraped(req, session)
             break
 
