@@ -4,7 +4,9 @@ from requisitions import Requisition
 from responses import Response
 from external_apis.twitter import retrieve_tweets_from_user
 from repository.tweet import insert_tweet
+from repository.tweet import get_list_tweet_ids
 from entities.tweet import EntityTweet
+from .utils import check_if_tweet_was_saved_before
 
 
 def get_tweets_from_user(req: Requisition):
@@ -20,7 +22,11 @@ def get_tweets_from_user(req: Requisition):
 
 def save_tweets_on_database(req: Requisition, session: Session) -> Response:
     response = Response()
+    ids = get_list_tweet_ids(session)
     for tweet in req.payload:
+        if check_if_tweet_was_saved_before(tweet["id"], ids):
+            continue
+
         try:
             entity_tweet = EntityTweet(**tweet)
             insert_tweet(entity_tweet, session)

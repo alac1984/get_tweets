@@ -35,3 +35,9 @@ def insert_tweet(tweet: EntityTweet, session: Session):
 
     session.add(model_tweet)
     session.commit()
+
+
+def get_list_tweet_ids(session: Session) -> list[int]:
+    ids = session.query(Tweet).with_entities(Tweet.id).all()
+
+    return [oid[0] for oid in ids]

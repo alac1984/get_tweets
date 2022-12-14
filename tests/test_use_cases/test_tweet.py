@@ -36,7 +36,7 @@ def test_get_tweets_from_user_no_tweets(mock_tweets):
     assert "JSONDecodeError" in response.errors[0]["name"]
 
 
-def test_save_tweets_on_database(mock_tweets, session):
+def test_save_tweets_on_database_new_tweets(mock_tweets, session):
     req = Requisition(payload=mock_tweets.json())
 
     response = save_tweets_on_database(req, session)
@@ -46,5 +46,32 @@ def test_save_tweets_on_database(mock_tweets, session):
     assert response is not None
     assert isinstance(response, Response)
     assert len(response.content) == 2
+    assert tweets[0].id == 10293
+    assert len(tweets) == 2
+
+
+def test_save_tweets_on_database_one_inserted(mock_tweets, session):
+    req = Requisition(payload=mock_tweets.json())
+    response = save_tweets_on_database(req, session)
+
+    inserted_tweet = {
+        "id": 10294,
+        "user_id": 2,
+        "created_at": "2022-12-14T02:51:10.000Z",
+        "text": "É vóis",
+        "lang": "en",
+        "context_annotations": [
+            {"domain": {"id": 2, "name": "That", "description": "hell no"}}
+        ],
+    }
+
+    req = Requisition(payload=[inserted_tweet])
+    response = save_tweets_on_database(req, session)
+
+    tweets = session.query(Tweet).all()
+
+    assert response is not None
+    assert isinstance(response, Response)
+    assert len(response.content) == 0
     assert tweets[0].id == 10293
     assert len(tweets) == 2
