@@ -2,8 +2,13 @@ from sqlalchemy.orm import Session
 
 from repository.user import retrieve_last_scraped_user
 from repository.user import retrieve_next_user_to_be_scraped
+from repository.user import update_last_scraped_user
 from requisitions import Requisition
 from responses import Response
+
+
+def post_user(req: Requisition, session: Session) -> Response:
+    ...
 
 
 def get_id_last_user_scraped(req: Requisition, session: Session) -> Response:
@@ -31,7 +36,15 @@ def get_next_user_to_be_scraped(req: Requisition, session: Session) -> Response:
     return response
 
 
-def update_last_user_scraped(
-    req: Requisition, previous_scraped_id: int, last_scraped_id: int, session: Session
-) -> Response:
-    ...
+def change_last_user_scraped(req: Requisition, session: Session) -> Response:
+    response = Response()
+    prev_user_id = req.content[0]["prev_user_id"]
+    curr_user_id = req.content[0]["curr_user_id"]
+
+    try:
+        result = update_last_scraped_user(prev_user_id, curr_user_id, session)
+        response.content.append({"result": result})
+    except Exception as e:
+        response.add_error(str(e.__class__), e.__str__())
+
+    return response

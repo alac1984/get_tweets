@@ -2,6 +2,7 @@ import logging
 
 from repository.session import session
 from requisitions import Requisition
+from use_cases.user import 
 from use_cases.user import get_id_last_user_scraped
 from use_cases.user import get_next_user_to_be_scraped
 from use_cases.user import update_last_user_scraped
@@ -32,8 +33,14 @@ def run() -> None:
         req = Requisition(payload={"next_user_username": next_user["username"]})
         tweets = get_tweets_from_user(req).content
 
-        if "tweets" in tweets:
-            save_tweets_on_database(req)
+        if len(tweets) > 0:
+            save_tweets_on_database(req, session)
+            req = Requisition(
+                payload={
+                    "prev_user_id": last_user_id,
+                    "curr_user_id": next_user["id"],
+                }
+            )
             update_last_user_scraped(req, session)
             break
 

@@ -7,6 +7,7 @@ class User(Base):
     __tablename__ = "tb_user"
 
     id = Column(Integer(), primary_key=True)
+    twitter_id = Column(Integer(), nullable=False)
     username = Column(String(), nullable=False)
     created_at = Column(DateTime(), nullable=False)
     description = Column(String())

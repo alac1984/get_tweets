@@ -47,6 +47,7 @@ def init_db(engine):
     }
     user1 = {
         "username": "pythonjazz",
+        "twitter_id": 303309439382993042,
         "created_at": datetime(2022, 1, 1, 1, 1, 1, 1),
         "description": "The best",
         "location": "Fortaleza",
@@ -54,6 +55,7 @@ def init_db(engine):
     }
     user2 = {
         "username": "freeforall",
+        "twitter_id": 30392,
         "created_at": datetime(2022, 1, 1, 1, 1, 1, 1),
         "description": "Awesome user",
         "location": "Tortuga",
@@ -61,6 +63,7 @@ def init_db(engine):
     }
     user3 = {
         "username": "kallen",
+        "twitter_id": 30392309,
         "created_at": datetime(2022, 1, 1, 1, 1, 1, 1),
         "description": "The worst",
         "location": "Tijuana",
@@ -79,8 +82,8 @@ def init_db(engine):
     with engine.connect() as conn:
         ins_user_stmt = text(
             """
-            insert into tb_user(username, created_at, description, location, last_scraped)
-            values(:username, :created_at, :description, :location, :last_scraped);
+            insert into tb_user(username, twitter_id, created_at, description, location, last_scraped)
+            values(:username, :twitter_id, :created_at, :description, :location, :last_scraped);
             """
         )
         ins_tweet_stmt = text(
