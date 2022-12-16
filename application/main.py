@@ -2,7 +2,6 @@ import logging
 
 from repository.session import session
 from requisitions import Requisition
-from use_cases.user import 
 from use_cases.user import get_id_last_user_scraped
 from use_cases.user import get_next_user_to_be_scraped
 from use_cases.user import update_last_user_scraped
