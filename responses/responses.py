@@ -11,3 +11,9 @@ class Response:
 
     def __bool__(self):
         return True if not self.has_error() else False
+
+    def __repr__(self):
+        if self.has_error:
+            return f"Response[OK](content={self.content})"
+        else:
+            return f"Response[ERROR](errors={self.errors})"

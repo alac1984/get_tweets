@@ -7,5 +7,5 @@ class EntityUser(BaseModel):
     username: str
     twitter_id: int
     created_at: datetime
-    description: str
-    location: str
+    description: str = None
+    location: str = None
