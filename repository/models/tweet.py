@@ -1,6 +1,14 @@
 from __future__ import annotations
 
-from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import (
+    Table,
+    Column,
+    Integer,
+    BigInteger,
+    String,
+    DateTime,
+    ForeignKey,
+)
 from sqlalchemy.orm import Mapped, relationship, backref
 
 from repository.base import Base
@@ -25,7 +33,7 @@ tb_tweet_entity = Table(
 class Tweet(Base):
     __tablename__ = "tb_tweet"
 
-    id = Column(Integer(), primary_key=True)
+    id = Column(BigInteger(), primary_key=True)
     user_id = Column(Integer(), ForeignKey("tb_user.id"))
     created_at = Column(DateTime(), nullable=False)
     lang = Column(String(), nullable=False)
