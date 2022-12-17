@@ -1,8 +1,13 @@
 """repository/user.py"""
+import logging
 from sqlalchemy.orm import Session
 
 from entities.user import EntityUser
 from .models.user import User
+
+logging.basicConfig(
+    level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 
 
 def insert_user(user: EntityUser, session: Session):
@@ -13,6 +18,7 @@ def insert_user(user: EntityUser, session: Session):
         description=user.description,
         location=user.location,
     )
+    logging.debug(f"model_user: {model_user}")
     session.add(model_user)
     session.commit()
 
