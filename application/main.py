@@ -5,6 +5,7 @@ from requisitions import Requisition
 from use_cases.user import get_id_last_user_scraped
 from use_cases.user import get_next_user_to_be_scraped
 from use_cases.user import change_last_user_scraped
+from use_cases.user import flush_users
 from use_cases.tweet import get_tweets_from_user
 from use_cases.tweet import save_tweets_on_database
 
@@ -14,19 +15,45 @@ logging.basicConfig(
 )
 
 
-def flush_users() -> None:
-    ...
+def create_users():
+    users = [
+        {
+            "twitter_id": 1420152235145797632,
+            "created_at": "",
+            "username": "",
+            "last_scraped": True,
+        },
+        {
+            "twitter_id": 575522002,
+            "created_at": "",
+            "username": "",
+        },
+        {
+            "twitter_id": 1603953685205336065,
+            "created_at": "",
+            "username": "",
+        },
+        {
+            "twitter_id": 313074549,
+            "created_at": "",
+            "username": "",
+        },
+        {
+            "twitter_id": 30541996,
+            "created_at": "",
+            "username": "",
+        },
+    ]
 
+    req = Requisition(payload=users)
 
-def test_func() -> str:
-    return "This"
+    flush_users(req, session)
 
 
 def run() -> bool:
     while True:
         req = Requisition()
         # Get id of last user scraped
-        print(test_func())
         last_user_id = get_id_last_user_scraped(req, session).content[0][
             "last_user_id"
         ]

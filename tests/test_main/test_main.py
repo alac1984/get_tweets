@@ -1,5 +1,4 @@
 from unittest.mock import patch
-from unittest.mock import MagicMock
 
 from responses import Response
 from application.main import run
