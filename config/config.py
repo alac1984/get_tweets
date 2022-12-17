@@ -1,5 +1,11 @@
 import os
+import logging
 from dotenv import dotenv_values
+
+
+logging.basicConfig(
+    level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 
 
 class Config:
@@ -20,4 +26,6 @@ class Config:
 
     @property
     def conn_str(self):
-        return f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_DB}"
+        conn_str = f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_DB}"
+        logging.debug(f"conn_str: {conn_str}")
+        return conn_str
