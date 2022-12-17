@@ -10,10 +10,10 @@ logging.basicConfig(
 
 class Config:
     def __init__(self):
-        # Get environment
-
-        if os.environ.get("GET_TWEETS"):
+        # Production environment
+        if os.environ.get("ENVIRON_BASH"):
             self.env = os.environ
+        # Development environment
         else:
             self.env = dotenv_values(".env")
 
