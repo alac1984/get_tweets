@@ -1,7 +1,5 @@
-import os
 import pytest
 from config import Config
-from unittest import mock
 
 
 @pytest.fixture

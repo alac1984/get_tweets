@@ -8,7 +8,9 @@ from responses import Response
 
 
 def post_user(req: Requisition, session: Session) -> Response:
-    ...
+    response = Response()
+
+    return response
 
 
 def get_id_last_user_scraped(req: Requisition, session: Session) -> Response:
