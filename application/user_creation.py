@@ -41,11 +41,11 @@ def create_users():
     req = Requisition(payload=users)
 
     response = flush_users(req, session)
-    logging.debug(f"flush_users: {response.content}")
+    logging.debug(f"flush_users: {response}")
 
     return response
 
 
 if __name__ == "__main__":
     response = create_users()
-    logging.debug(f"create_users: {response.content}")
+    logging.debug(f"create_users: {response}")

@@ -81,5 +81,4 @@ def test_flush_user(session):
 
     response = flush_users(req, session)
 
-    breakpoint()
     assert response is not None
