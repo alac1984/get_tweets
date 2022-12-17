@@ -60,3 +60,25 @@ def test_flush_users(session):
 
     assert response is not None
     assert response.content[0]["result"] is True
+
+
+def test_flush_user(session):
+    users = [
+        {
+            "twitter_id": 1420152235145797632,
+            "created_at": "2021-07-27T22:41:05.000Z",
+            "username": "pythonjazz",
+            "last_scraped": True,
+        },
+        {
+            "twitter_id": 575522002,
+            "created_at": "2012-05-09T17:06:03.000Z",
+            "username": "Bruna_Hawk",
+        },
+    ]
+
+    req = Requisition(payload=users)
+
+    response = flush_users(req, session)
+
+    assert response is not None

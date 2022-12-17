@@ -1,7 +1,7 @@
 import logging
 from requisitions import Requisition
 from repository.session import session
-from repository.user import flush_users
+from use_cases.user import flush_users
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -47,5 +47,5 @@ def create_users():
 
 if __name__ == "__main__":
     logging.debug("Flushing users...")
-    response = flush_users()
+    response = create_users()
     logging.debug(f"{response.content}")

@@ -1,5 +1,4 @@
 """tests/test_repository/test_user.py"""
-import pytest
 from datetime import datetime
 
 from repository.models.user import User

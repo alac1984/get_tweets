@@ -58,7 +58,7 @@ def flush_users(req: Requisition, session: Session) -> Response:
     response = Response()
 
     try:
-        for user_data in response.content:
+        for user_data in req.payload:
             entity_user = EntityUser(**user_data)
             insert_user(entity_user, session)
     except Exception as e:
