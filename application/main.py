@@ -30,16 +30,18 @@ def run() -> bool:
         req = Requisition(payload={"next_user_username": next_user["username"]})
         tweets = get_tweets_from_user(req).content
 
-        req = Requisition(
+        req_change = Requisition(
             payload={
                 "prev_user_id": last_user_id,
                 "curr_user_id": next_user["id"],
             }
         )
 
+        req_save = Requisition(payload=tweets)
+
         if len(tweets) > 0:
-            save_tweets_on_database(req, session)
-            change_last_user_scraped(req, session)
+            save_tweets_on_database(req_save, session)
+            change_last_user_scraped(req_change, session)
             return True
 
         change_last_user_scraped(req, session)
