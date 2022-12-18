@@ -23,7 +23,7 @@ def get_tweets_from_user(req: Requisition):
 def save_tweets_on_database(req: Requisition, session: Session) -> Response:
     response = Response()
     ids = get_list_tweet_ids(session)
-    for tweet in req.payload:
+    for tweet in req.payload["data"]:
         if check_if_tweet_was_saved_before(tweet["id"], ids):
             continue
 

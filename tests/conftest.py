@@ -141,28 +141,30 @@ def init_db(engine):
 
 @pytest.fixture(scope="function")
 def mock_tweets():
-    tweets_dict = [
-        {
-            "id": 10293,
-            "user_id": 1,
-            "created_at": "2022-12-14T02:51:10.000Z",
-            "text": "É tóis",
-            "lang": "pt",
-            "context_annotations": [
-                {"domain": {"id": 1, "name": "This", "description": "hell yeah"}}
-            ],
-        },
-        {
-            "id": 10294,
-            "user_id": 2,
-            "created_at": "2022-12-14T02:51:10.000Z",
-            "text": "É vóis",
-            "lang": "en",
-            "context_annotations": [
-                {"domain": {"id": 2, "name": "That", "description": "hell no"}}
-            ],
-        },
-    ]
+    tweets_dict = {
+        "data": [
+            {
+                "id": 10293,
+                "user_id": 1,
+                "created_at": "2022-12-14T02:51:10.000Z",
+                "text": "É tóis",
+                "lang": "pt",
+                "context_annotations": [
+                    {"domain": {"id": 1, "name": "This", "description": "hell yeah"}}
+                ],
+            },
+            {
+                "id": 10294,
+                "user_id": 2,
+                "created_at": "2022-12-14T02:51:10.000Z",
+                "text": "É vóis",
+                "lang": "en",
+                "context_annotations": [
+                    {"domain": {"id": 2, "name": "That", "description": "hell no"}}
+                ],
+            },
+        ]
+    }
     tweets_json = json.dumps(tweets_dict).encode("utf-8")
     response = Response()
     response._content = tweets_json
