@@ -10,4 +10,4 @@ def test_retrieve_tweets_from_user(mock_tweets):
         tweets = retrieve_tweets_from_user("pythonjazz")
 
         assert tweets is not None
-        assert tweets[0]["id"] == 10293
+        assert tweets["data"][0]["id"] == 10293

@@ -17,8 +17,8 @@ def test_get_tweets_from_user_success(mock_tweets):
 
     assert response is not None
     assert isinstance(response, Response)
-    assert isinstance(response.content, list)
-    assert len(response.content) == 2
+    assert isinstance(response.content["data"], list)
+    assert len(response.content["data"]) == 2
 
 
 def test_get_tweets_from_user_no_tweets(mock_tweets):
@@ -55,17 +55,21 @@ def test_save_tweets_on_database_one_inserted(mock_tweets, session):
     response = save_tweets_on_database(req, session)
 
     inserted_tweet = {
-        "id": 10294,
-        "user_id": 2,
-        "created_at": "2022-12-14T02:51:10.000Z",
-        "text": "É vóis",
-        "lang": "en",
-        "context_annotations": [
-            {"domain": {"id": 2, "name": "That", "description": "hell no"}}
-        ],
+        "data": [
+            {
+                "id": 10294,
+                "user_id": 2,
+                "created_at": "2022-12-14T02:51:10.000Z",
+                "text": "É vóis",
+                "lang": "en",
+                "context_annotations": [
+                    {"domain": {"id": 2, "name": "That", "description": "hell no"}}
+                ],
+            }
+        ]
     }
 
-    req = Requisition(payload=[inserted_tweet])
+    req = Requisition(payload=inserted_tweet)
     response = save_tweets_on_database(req, session)
 
     tweets = session.query(Tweet).all()

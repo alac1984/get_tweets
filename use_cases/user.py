@@ -42,8 +42,8 @@ def get_next_user_to_be_scraped(req: Requisition, session: Session) -> Response:
 
 def change_last_user_scraped(req: Requisition, session: Session) -> Response:
     response = Response()
-    prev_user_id = req.content[0]["prev_user_id"]
-    curr_user_id = req.content[0]["curr_user_id"]
+    prev_user_id = req.payload["prev_user_id"]
+    curr_user_id = req.payload["curr_user_id"]
 
     try:
         result = update_last_scraped_user(prev_user_id, curr_user_id, session)
