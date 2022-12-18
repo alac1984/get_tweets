@@ -55,6 +55,7 @@ def change_last_user_scraped(req: Requisition, session: Session) -> Response:
 
 
 def flush_users(req: Requisition, session: Session) -> Response:
+    breakpoint()
     response = Response()
 
     try:

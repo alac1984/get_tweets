@@ -36,32 +36,6 @@ def test_get_next_user_to_be_scraped(init_db, session):
     assert response.content[0]["id"] == 2
 
 
-def test_flush_users(session):
-    req = Requisition(
-        payload=[
-            {
-                "twitter_id": 1029,
-                "created_at": "2010-07-03T18:26:22.000Z",
-                "username": "this",
-            },
-            {
-                "twitter_id": 1030,
-                "created_at": "2010-07-03T18:26:22.000Z",
-                "username": "that",
-            },
-            {
-                "twitter_id": 1031,
-                "created_at": "2010-07-03T18:26:22.000Z",
-                "username": "those",
-            },
-        ]
-    )
-    response = flush_users(req, session)
-
-    assert response is not None
-    assert response.content[0]["result"] is True
-
-
 def test_flush_user(session):
     users = [
         {

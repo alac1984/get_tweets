@@ -7,6 +7,7 @@ class Response:
         self.errors.append({"name": name, "message": message})
 
     def has_error(self) -> bool:
+        # True: it has errors; False: no errors, everything's ok
         return len(self.errors) > 0
 
     def __bool__(self):
@@ -14,6 +15,6 @@ class Response:
 
     def __repr__(self):
         if self.has_error:
-            return f"Response[ERROR](errors={self.errors})"
-        else:
             return f"Response[OK](content={self.content})"
+        else:
+            return f"Response[ERROR](errors={self.errors})"
