@@ -1,3 +1,4 @@
+import logging
 from sqlalchemy.orm import Session
 
 from requisitions import Requisition
@@ -9,6 +10,11 @@ from entities.tweet import EntityTweet
 from .utils import check_if_tweet_was_saved_before
 
 
+logging.basicConfig(
+    level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+
+
 def get_tweets_from_user(req: Requisition):
     response = Response()
     try:
@@ -17,6 +23,7 @@ def get_tweets_from_user(req: Requisition):
     except Exception as e:
         response.add_error(str(e.__class__), e.__str__())
 
+    logging.debug(f"retrieve tweets: {response}")
     return response
 
 
@@ -34,4 +41,5 @@ def save_tweets_on_database(req: Requisition, session: Session) -> Response:
         except Exception as e:
             response.add_error(str(e.__class__), e.__str__())
 
+    logging.debug(f"save tweets: {response}")
     return response
